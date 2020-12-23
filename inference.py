@@ -33,22 +33,36 @@ criterionRGBL2 = nn.MSELoss()
 # read data
 data = single_inference_dataLoad(opt)
 # forward
-generated = model(data, mode='demo_inference')
+generated, _ = model(data, mode='demo_inference')
 img_path = data['path']
 print('process image... %s' % img_path)
 
 # remove background
 if opt.remove_background:
     generated = generated * data['label_tag'].float() + data['image_tag'] *(1 - data['label_tag'].float())
+"""
 fake_image = tensor2im(generated[0])
 if opt.add_feat_zeros or opt.add_zeros:
     th = opt.add_th
     H, W = opt.crop_size, opt.crop_size
     fake_image_tmp = fake_image[int(th/2):int(th/2)+H,int(th/2):int(th/2)+W,:]
     fake_image = fake_image_tmp
+"""
+if opt.add_feat_zeros or opt.add_zeros:
+    th = opt.add_th
+    H, W = opt.crop_size, opt.crop_size
+    tmp = generated[:, :, int(th / 2):int(th / 2) + H, int(th / 2):int(th / 2) + W]
+    generated = tmp
 
-fake_image_np = fake_image.copy()
-fake_image = Image.fromarray(np.uint8(fake_image))
+result = generated.permute(0, 2, 3, 1)
+result = result.cpu().numpy()
+result = (result + 1) * 127.5
+result = np.asarray(result[0, :, :, :], dtype=np.uint8)
+# update the self.save_datas
+fake_image = Image.fromarray(result.copy())
+
+#fake_image_np = fake_image.copy()
+#fake_image = Image.fromarray(np.uint8(fake_image))
 
 if opt.use_ig:
     fake_image.save('./inference_samples/inpaint_fake_image.jpg')
