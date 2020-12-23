@@ -87,7 +87,9 @@ if __name__ == '__main__':
         
     # Get structure
     image = Image.open(args.image_path)
+    print('image size', image.size)
     mask = np.array(Image.open(args.hairmask_path))
+    print('mask size',mask.shape)
     if np.max(mask) > 1:
         mask = (mask > 130) * 1
     trans_image = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -108,5 +110,5 @@ if __name__ == '__main__':
     orient_tensor[orient_tensor < 0] += math.pi
     orient_np = orient_tensor.numpy().squeeze() * 255. / math.pi * mask
     orient_save = Image.fromarray(np.uint8(orient_np))
-    orient_save.save(os.path.join(args.orientation_root, args.image_path.split('/')[-1][:-4]+'.png'))
+    orient_save.save(os.path.join(args.orientation_root, args.image_path.split('/')[-1][:-4]+'_orient_dense.png'))
     # cv2.imwrite(args.orientation_root, orient_tensor.numpy().squeeze() * 255. / math.pi)
