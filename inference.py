@@ -33,7 +33,7 @@ criterionRGBL2 = nn.MSELoss()
 # read data
 data = single_inference_dataLoad(opt)
 # forward
-generated = model(data, mode='demo-inference')
+generated = model(data, mode='demo_inference')
 img_path = data['path']
 print('process image... %s' % img_path)
 
