@@ -143,7 +143,7 @@ def single_inference_dataLoad(opt):
     image_tag_tensor = transform_image(image_tag)
     image_tag_tensor = torch.unsqueeze(image_tag_tensor, 0)
 
-    orient_tensor = transform_label(orient_tag) * 255
+    orient_tensor = transform_label(orient_ref) * 255
     orient_tensor = torch.unsqueeze(orient_tensor, 0)
 
     data = {'label_ref': label_ref_tensor,
