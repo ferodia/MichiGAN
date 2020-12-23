@@ -113,13 +113,13 @@ def single_inference_dataLoad(opt):
 
     # hole mask
     if opt.use_ig:
-        if opt.inference_orient_name == opt.inference_tag_name:
-            hole = np.array(label_tag)
-            hole = generate_hole(hole, np.array(orient_mask))
-            hole_tensor = transform_label(hole) * 255.0
-            hole_tensor = torch.unsqueeze(hole_tensor, 0)
-        else:
-            hole_tensor = label_tag_tensor - orient_mask_tensor * label_tag_tensor
+        #if opt.inference_orient_name == opt.inference_tag_name:
+        #    hole = np.array(label_tag)
+        #    hole = generate_hole(hole, np.array(orient_mask))
+        #    hole_tensor = transform_label(hole) * 255.0
+        #    hole_tensor = torch.unsqueeze(hole_tensor, 0)
+        #else:
+        hole_tensor = label_tag_tensor - orient_mask_tensor * label_tag_tensor
 
     else:
         hole_tensor = torch.tensor(0)
